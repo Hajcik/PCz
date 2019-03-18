@@ -51,5 +51,7 @@ group by id_gatunku, extract(year from czas)
 select decode(grouping_id(tryb, stopien, kierunek, rok), 0, 'TSK', 1, 'TS', 3, 'T', 7, 'w danym trybie', 15, 'ogolem')komentarz,
 tryb, stopien, kierunek, rok, count(*) from Studenci
 group by rollup (tryb, stopien, kierunek, rok);
-
+-- cube  ^^^
+-- grouping sets ( (tryb, stopien) , (kierunek), () )
+select decode (grouping_id (tryb, stopien, kierunek, rok) 0, 'TSK', 1, 'TS', 3, 'T', 7, 'w danym trybie', 15, 'ogolem', 'xxx')komentarz,
 
