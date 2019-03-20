@@ -1,0 +1,41 @@
+#include "stdafx.h"
+#include<iostream>
+using namespace std;
+//ILOCZYN SKALARNY
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int n;
+	int wynik1;
+	int wynik2;
+	cout << "Wprowadz rozmiar tablicy: ";
+	cin >> n;
+	int *tab1 = new int[n];
+	int *tab2 = new int[n];
+	for (int i = 0; i < n; i++)
+	{
+		cin >> tab1[i], tab2[i];
+	}		
+	
+	
+	__asm{		
+		MOV ecx, n;
+		MOV edi, tab1;
+		MOV esi, tab2;
+		XOR eax, eax;
+		MOV eax, [edi + 4 * ecx - 4];
+		MOV ebx, [esi + 4 * edx - 4];
+petla:
+		MUL ebx;
+		ADD ebx, eax;				
+		DEC ecx;
+		JLE petla;
+		MOV wynik1, ebx;
+		MOV wynik2, eax;
+		
+	// nie dziala, do poprawki
+	}
+	cout << "Wynik sumowania: " << wynik1 << "\nWynik mnozenia: " << wynik2;
+	system("PAUSE");
+	return 0;
+}
+
