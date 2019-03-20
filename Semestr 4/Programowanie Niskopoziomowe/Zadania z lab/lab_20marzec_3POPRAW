@@ -21,18 +21,14 @@ int _tmain(int argc, _TCHAR* argv[])
 		MOV ecx, n;
 		MOV edi, tab1;
 		MOV esi, tab2;
-		XOR eax, eax;
-		MOV eax, [edi + 4 * ecx - 4];
-		MOV ebx, [esi + 4 * edx - 4];
-petla:
-		MUL ebx;
-		ADD ebx, eax;				
+		XOR ebx, ebx;
+	petla:	MOV eax, [edi + 4 * ecx - 4];
+		MUL [esi + 4 * ecx - 4];
+		ADD ebx, eax;
 		DEC ecx;
-		JLE petla;
-		MOV wynik1, ebx;
-		MOV wynik2, eax;
-		
-	// nie dziala, do poprawki
+		JNZ petla;
+		MOV wynik, ebx;
+	
 	}
 	cout << "Wynik sumowania: " << wynik1 << "\nWynik mnozenia: " << wynik2;
 	system("PAUSE");
