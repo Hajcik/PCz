@@ -5,3 +5,4 @@ $m = "A" + 6 + $mies
 $m = $mies.Replace(co , na co)
 $m = $mies.Split(" ")
 $m = [string]::Join(" ", $tab)
+$dni = (Get-Culture).Calendar.GetDaysInMonth(rok, miesiac)
