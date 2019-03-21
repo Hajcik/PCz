@@ -2,15 +2,28 @@ open System
 
 [<EntryPoint>]
 let main argv =
+
+// Sekwencje
+    let seq1 = seq {1 .. 10 }
+    let seq2 = seq {0 .. 10 .. 100 }
+    let seq3 = seq { for i in 1 .. 10 do yield i * i}
+    let seq4 = seq { for i in 1 .. 10 -> i * i}
+    printfn "seq1: %A" seq1
+    printfn "seq2: %A" seq2
+    printfn "seq3: %A" seq3
+    printfn "seq4: %A" seq4
+    Console.WriteLine()
+// Listy
     let lista  = [1; 2; 3]
-    let lista2 = [1 .. 5]
-    let lista3 = [for i in 1..10 -> i*i]
-    let lista4 = 1 :: 2 :: 3 :: 4 :: []
-    let lista5 = List.init 5 (fun x-> x*2)
-    let lista6 = [
+    let lista6 = [1 .. 5]
+    let lista2 = [
         1
         2
         3 ]
+    let lista3 = [for i in 1..10 -> i*i]
+    let lista4 = 1 :: 2 :: 3 :: 4 :: []
+    let lista5 = List.init 5 (fun x-> x*2)
+    
 // Dodawanie kolejnego elementu na poczatek listy:
     let przykladowa_lista = [1;2;3]
     let y = 10::przykladowa_lista
@@ -59,8 +72,10 @@ let main argv =
     printfn "Tablica: %A" tablica
     let tablica1 = Array.create 5 1
     printfn "Tablica1: %A" tablica1
+
 //  Długość tablicy
     printfn "Dlugosc tablicy: %A" tablica.Length
+
 //  Zmiana elementu
     tablica.[2] <- 7
     printfn "Zmiana elementu tablicy1: %A" tablica1
@@ -73,36 +88,37 @@ let main argv =
     printfn "zmiana elementu o numerze indeksu(2) tablicy1: %A"
     (Array.get tablica1 2)
 
-//  utworzenie pustej tablicy
+//  Utworzenie pustej tablicy
     let tablica2 = Array.empty
     printfn "pusta tablica2: %A" tablica2
 
-//  utworzenie tablicy z samych zer
+//  Utworzenie tablicy z samych zer
     let tablica3: int array = Array.zeroCreate 5
     printfn "tablica3 samych zer: %A" tablica3
 
-//  kopiowanie tablicy
+//  Kopiowanie tablicy
     let tablica4 = Array.copy tablica3
     printfn "tablica4, czyli kopia tablicy3: %A" tablica4
-//  wypełnianie tablicy nowymi zmiennymi
+//  Wypełnianie tablicy nowymi zmiennymi
     Array.fill tablica3 1 3 5
     printfn "tablica3 z nowymi elementami: %A" tablica3
-//  utworzenie tablicy z użyciem części elementów z poprzedniej tablicy
+//  Utworzenie tablicy z użyciem części elementów z poprzedniej tablicy
     let tablica5 = Array.sub tablica3 1 2
     printfn "tablica5, czyli częśc tablicy3: %A" tablica5
-//  połączenie tablic
+//  Połączenie tablic
     let tablica6 = Array.append tablica3 tablica5
     printfn "tablica6, czyli połaczenie tablicy3 i tablicy5: %A" tablica6
-// filtrowanie - parzyste
+//  Filtrowanie - parzyste
     printfn "parzyste o 1 do 20: %A" (Array.filter (fun x -> x % 2 = 0)
     [|1..20|])
-//  tablica odwrócona
+//  Tablica odwrócona
     printfn "tablica odwrócona: %A" (Array.rev tablica5)
-//  tablica 2D
+//  Tablica 2D
     let tablica7 = Array2D.init 2 3 (fun i j -> (i+1)*(j+1))
     printfn "tablica 2D : %A" tablica7
-//  zamiana elementu tablicy2D
+//  Zamiana elementu tablicy 2D
     tablica7.[0,1] <- 8
     printfn "tablica 2D po zamaianie: %A" tablica7
+
     Console.ReadKey() |> ignore
     0 // return an integer exit code
