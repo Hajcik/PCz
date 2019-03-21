@@ -6,3 +6,8 @@ $m = $mies.Replace(co , na co)
 $m = $mies.Split(" ")
 $m = [string]::Join(" ", $tab)
 $dni = (Get-Culture).Calendar.GetDaysInMonth(rok, miesiac)
+
+Function Licz($p1, $p2, ...) {
+
+}
+Licz 7 2 
