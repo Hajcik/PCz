@@ -25,10 +25,10 @@ enum
     ZOOMout,
     EXIT
 };
-int projection;
-int scale;
+int projection = PERSPECTIVE;
+int scale = FULLSCREEN;
 int angle = 120;
-int kat = 120;
+int kat = 90;
 static void display(void);
 
 double okoX = 35.0;
@@ -41,13 +41,14 @@ double centerZ = 0;
 
 GLdouble z = -3.0;
 GLdouble zoomk = 1.0;
+
+GLdouble aspect = 1.0;
+GLfloat zakres = 4.0f;
+GLfloat blisko = 1.0f;
+GLfloat daleko = 25.0f;
+
 static void resize(int width, int height)
 {
-    GLdouble aspect = 1.0;
-    GLfloat zakres = 4.0f;
-    GLfloat blisko = 1.0f;
-    GLfloat daleko = 25.0f;
-
 //    glMatrixMode(GL_MODELVIEW);
 //    gluLookAt( okoX, okoY, okoZ, centerX, centerY, centerZ, 0, 0, -1);
 
@@ -104,28 +105,28 @@ static void resize(int width, int height)
         }
         else gluPerspective( angle, aspect, blisko, daleko );
     }
-
     display();
 }
 
-static void key(unsigned char key, int x, int y)
+static void keyboard(unsigned char key, int x, int y)
 {
     switch (key)
     {
         case 27:
             exit(0);
             break;
-        case 43:
-            zoomk += 0.05;
+        case '+':
+            zoomk += 0.01;
         //    display();
             break;
-        case 45:
-            zoomk -= 0.05;
+        case '-':
+            zoomk -= 0.01;
          //   display();
             break;
     }
-    glutPostRedisplay();
-    resize( glutGet (GLUT_WINDOW_WIDTH), glutGet (GLUT_WINDOW_HEIGHT) );
+    //glutPostRedisplay();
+    //resize( glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) );
+    display();
 }
 
 static void Special_key(int key, int x, int y)
@@ -139,8 +140,8 @@ static void Special_key(int key, int x, int y)
         kat+= 5;
         break;
     }
-    glutPostRedisplay();
-
+    //glutPostRedisplay();
+    resize( glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) );
 }
 void MouseMotion(int x, int y)
 {
@@ -255,10 +256,10 @@ static void display(void)
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  //  glMatrixMode(GL_MODELVIEW);
+    glMatrixMode(GL_MODELVIEW);
     glTranslated(pos.x, pos.y, 0);
-    glRotatef(rot, 0, 0, 1);
-    glScalef(zoomk, zoomk, 1.0f);
+    glRotatef(kat, 0, 0, 1);
+    glScalef(zoomk, zoomk, zoomk);
 
         glColor3f(_COLORRED, _COLORGRE, _COLORBLU);
         glBegin(GL_LINES);
@@ -322,16 +323,16 @@ int main(int argc, char *argv[])
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
     glutCreateWindow("GKiW Laboratorium 5");
-    glutReshapeFunc(resize);
     glutDisplayFunc(display);
-    glutKeyboardFunc(key);
+    glutReshapeFunc(resize);
+    glutKeyboardFunc(keyboard);
     glutSpecialFunc(Special_key);
-    glutIdleFunc(idle);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glDepthFunc(GL_LESS);
-    glutMouseFunc(MouseButton);
-    glutMotionFunc(MouseMotion);
+    //glutIdleFunc(idle);
+    //glEnable(GL_CULL_FACE);
+    //glCullFace(GL_BACK);
+    //glDepthFunc(GL_LESS);
+    //glutMouseFunc(MouseButton);
+    //glutMotionFunc(MouseMotion);
         int skalowanie = glutCreateMenu(_SCALEMENU);
         #ifdef WIN32
             glutAddMenuEntry("SCALING: FULLSCREEN", FULLSCREEN);
