@@ -118,5 +118,7 @@ select nr_akt, nazwisko, id_dzialu, stanowisko,
 
 INSERT INTO Lista_Plac VALUES(1222, 'TESTOWSKI', 10, 'INFORMATYK', 5000);
 
+drop view Lista_Plac;
+
 SELECT * FROM Lista_plac; 
 select * from pracownicybis;
