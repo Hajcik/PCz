@@ -17,7 +17,7 @@ enum
 {
     BLACK, WHITE, RED, GREEN, BLUE, PINK, CYAN,
     FULLSCREEN, ASPECT_1_1,
-    PERSPECTIVE, FRUSTUM,
+    PERSPECTIVE, FRUSTUM, ORTHO,
     LIGHT_on, LIGHT_off,
     PRZYWROC, EXIT
 };
@@ -34,7 +34,6 @@ void _COLORMENU(int value);
 void _BACKGROUNDCOLORMENU(int value);
 void _LIGHTINGMENU(int value);
 void _PROJECTIONMENU(int value);
-void _ITEMMENU(int value);
 void _MAINMENU(int value);
 void _FLOOR();
 int projection = FRUSTUM;
@@ -44,13 +43,13 @@ int button_state = GLUT_UP;
 int button_x;
 int button_y;
 int FOV=90;
-GLPFrame frameCamera;
+
 GLdouble _COLORRED = 0.0;   // color
 GLdouble _COLORGRE = 0.0;
 GLdouble _COLORBLU = 0.0;
-GLdouble _COLORREDb = 0.3;  // background color
-GLdouble _COLORGREb = 0.3;
-GLdouble _COLORBLUb = 0.35;
+GLdouble _COLORREDb = 0.01;  // background color
+GLdouble _COLORGREb = 0.01;
+GLdouble _COLORBLUb = 0.01;
 GLdouble zoomk = 2.0;
 GLdouble aspect = 1.0;
 GLfloat rotateX = 0.0;
@@ -62,13 +61,28 @@ GLfloat blisko = 2.0f;
 GLfloat daleko = 100.0f;
 GLdouble przybliz = 0.2;
 GLfloat yyy=0;
-GLfloat ambient_light[4]= { 0.5, 0.5, 0.5, 1.0 };  // swiatla
-GLfloat diffuse_light[4]= { 0.8, 0.8, 0.8, 1.0 };
-GLfloat specular_light[4]={ 1.0, 1.0, 1.0, 1.0 };
 
-void _FLOOR()
+GLPFrame frameCamera;
+GLPVector3 vPoints[3] = { {0.0f,  -1.9f,  0.0f},
+                          {10.0f, -1.9f,  0.0f},
+                          {5.0f,  -1.9f, -5.0f}};
+GLPVector3 vPoints2[3] ={ {0.0f,  -1.5f,  0.0f},
+                          {10.0f, -1.5f,  0.0f},
+                          {5.0f,  -1.5f, -5.0f}};
+GLPVector3 bezCienia[3] = { {0.0f, -50.5f,  0.0f},
+                           {10.0f, -50.5f,  0.0f},
+                           { 5.0f, -50.5f, -5.0f}};
+
+GLfloat fPozycja_swiatla_pod[] = { 2.0f, -2.0f, 0.0f, 1.0f };
+GLfloat fPozycja_swiatla[] = { 2.0f, 2.0f, 0.0f, 1.0f };
+GLfloat fKierunek_reflektora[] = {0.0f, 1.0f, -12.0f, 1.0f};
+GLfloat fKierunek_reflektora_pod[] = {0.0f, -1.5f, -12.0f, 1.0f};
+GLfloat fPozycja_reflektora[] = {0.0f, 0.0f, 0.0f, 1.0f};
+GLfloat fPozycja_reflektora_pod[] = {0.0f, 0.0f, 0.0f, 1.0f};
+void _FLOOR(int HALF_GRID_SIZE)
 {
-    glBegin( GL_QUADS );
+ /*   glBegin( GL_LINE_LOOP );
+    glLineWidth(4);
     glNormal3f( 0.0, 1.0, 0.0);
 
     for( GLfloat z = -100.0; z < 100.0; z+= 1 )
@@ -98,6 +112,20 @@ void _FLOOR()
         }
     }
     glEnd();
+*/
+glLineWidth(1.5);
+glBegin(GL_LINES);
+glColor3f(0.91f, 0.10f, 0.86f);
+for(int i = -HALF_GRID_SIZE; i<=HALF_GRID_SIZE; i++)
+{
+    glVertex3f((float)i,0,(float)-HALF_GRID_SIZE);
+    glVertex3f((float)i,0,(float)HALF_GRID_SIZE);
+
+    glVertex3f((float)-HALF_GRID_SIZE,0,(float)i);
+    glVertex3f((float)HALF_GRID_SIZE,0,(float)i);
+}
+glEnd();
+//_FLOOR(10);
 }
 
 static void keyboard(unsigned char key, int x, int y)
@@ -114,20 +142,6 @@ static void keyboard(unsigned char key, int x, int y)
             zoomk-= 0.15;
             break;
     }
-            // R G B
-     if(key == 'R' && ambient_light[0] < 1.0 )
-        {   ambient_light[0] += 0.05;   }
-else if(key == 'r' && ambient_light[0] >-1.0 )
-        {   ambient_light[0] -= 0.05;       }
-else if(key == 'G' && ambient_light[1] < 1.0 )
-        {   ambient_light[1] += 0.05;   }
-else if(key == 'g' && ambient_light[1] >-1.0 )
-        {   ambient_light[1] -= 0.05;   }
-else if(key == 'B' && ambient_light[2] < 1.0 )
-        {   ambient_light[2] += 0.05;   }
-else if(key == 'b' && ambient_light[2] >-1.0 )
-        {   ambient_light[2] -= 0.05;   }
-
     display();
 }
 
@@ -156,7 +170,7 @@ static void Special_key(int key, int x, int y)
     case GLUT_KEY_END:
         break;
     }
-    display();
+    glutPostRedisplay();
 }
 
 static void MouseButton(int button, int state, int x, int y)
@@ -212,6 +226,12 @@ void Reshape(int width, int height)
             else
             glFrustum(-zakres, zakres, -zakres, zakres, blisko, daleko);
         }
+
+        if(projection==PERSPECTIVE)
+        {
+            if(height > 0) aspect = width/(GLdouble)height;
+            gluPerspective(FOV, aspect, blisko, daleko);
+        }
     display();
 }
 void _MAINMENU(int value)
@@ -259,6 +279,10 @@ void _PROJECTIONMENU(int value)
 {
     switch(value)
     {
+    case ORTHO:
+        projection = ORTHO;
+        Reshape( glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) );
+        break;
     case PERSPECTIVE:
         projection = PERSPECTIVE;
         Reshape( glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) );
@@ -291,14 +315,12 @@ static void display(void)
     const double a = t*90.0;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glpApplyCameraTransform(&frameCamera);
-
-
-    glScalef(zoomk, zoomk, zoomk);
+    glShadeModel(GL_SMOOTH);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(1, 1, 1, 0.75);
     glPushMatrix();
     glTranslated(0, -2, 0);
-    _FLOOR();
+    _FLOOR(1000);
     glPopMatrix();
 //    glFlush();
     glutSwapBuffers();
@@ -315,13 +337,13 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutReshapeFunc(Reshape);
     glClearColor(_COLORREDb, _COLORGREb, _COLORBLUb, 1.0f);
-    glutIdleFunc(idle);
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(Special_key);
     glutMouseFunc(MouseButton);
     glutMotionFunc(MouseMotion);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+    glutIdleFunc(idle);
         int oswietlenie_wlacznik = glutCreateMenu(_LIGHTINGMENU);
         #ifdef WIN32
             glutAddMenuEntry("LIGHTNING: ON", LIGHT_on);
@@ -342,10 +364,12 @@ int main(int argc, char *argv[])
         #ifdef WIN32
             glutAddSubMenu("WYBIERZ RZUTOWANIE", rzutowanie);
             glutAddSubMenu("WLACZNIK SWIATLA", oswietlenie_wlacznik);
+            glutAddSubMenu("PRZYWROC USTAWIENIA DOMYSLNE", PRZYWROC);
             glutAddMenuEntry("EXIT", EXIT);
         #else
             glutAddSubMenu("WYBIERZ RZUTOWANIE", rzutowanie);
             glutAddSubMenu("WLACZNIK SWIATLA", oswietlenie_wlacznik);
+            glutAddSubMenu("PRZYWROC USTAWIENIA DOMYSLNE", PRZYWROC);
             glutAddMenuEntry("EXIT", EXIT);
         #endif // WIN32
     glutAttachMenu(GLUT_RIGHT_BUTTON);
