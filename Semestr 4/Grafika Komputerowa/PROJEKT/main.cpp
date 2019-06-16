@@ -36,6 +36,7 @@ void _LIGHTINGMENU(int value);
 void _PROJECTIONMENU(int value);
 void _MAINMENU(int value);
 void _FLOOR();
+void _SETTINGS();
 int projection = FRUSTUM;
 int scale = ASPECT_1_1;
 int angle = 120;
@@ -79,17 +80,16 @@ GLfloat fKierunek_reflektora[] = {0.0f, 1.0f, -12.0f, 1.0f};
 GLfloat fKierunek_reflektora_pod[] = {0.0f, -1.5f, -12.0f, 1.0f};
 GLfloat fPozycja_reflektora[] = {0.0f, 0.0f, 0.0f, 1.0f};
 GLfloat fPozycja_reflektora_pod[] = {0.0f, 0.0f, 0.0f, 1.0f};
-void _FLOOR(int HALF_GRID_SIZE)
+void _FLOOR()
 {
- /*   glBegin( GL_LINE_LOOP );
+    glBegin( GL_QUADS );
     glLineWidth(4);
     glNormal3f( 0.0, 1.0, 0.0);
-
     for( GLfloat z = -100.0; z < 100.0; z+= 1 )
     {
         for(GLfloat x = -100.0; x < 100.0; x+= 1 )
         {
-            glColor4f( Green[ 0 ], Green[ 1 ], Green[ 2 ], 0.75 );
+            glColor4f( BlanchedAlmond[ 0 ], BlanchedAlmond[ 1 ], BlanchedAlmond[ 2 ], 0.75 );
             glVertex3f( x + 0.0, 0.0, z + 0.0 );
             glVertex3f( x + 0.0, 0.0, z + 0.5 );
             glVertex3f( x + 0.5, 0.0, z + 0.5 );
@@ -99,12 +99,12 @@ void _FLOOR(int HALF_GRID_SIZE)
             glVertex3f( x + 0.5, 0.0, z + 0.5 );
             glVertex3f( x + 1.0, 0.0, z + 0.5 );
             glVertex3f( x + 1.0, 0.0, z + 0.0 );
-            glColor4f( Blue[ 0 ], Blue[ 1 ], Blue[ 2 ], 0.75 );
+            glColor4f( CadetBlue[ 0 ], CadetBlue[ 1 ], CadetBlue[ 2 ], 0.75 );
             glVertex3f( x + 0.5, 0.0, z + 0.5 );
             glVertex3f( x + 0.5, 0.0, z + 1.0 );
             glVertex3f( x + 1.0, 0.0, z + 1.0 );
             glVertex3f( x + 1.0, 0.0, z + 0.5 );
-            glColor4f( Silver[ 0 ], Silver[ 1 ], Silver[ 2 ], 0.75 );
+            glColor4f( BurlyWood[ 0 ], BurlyWood[ 1 ], BurlyWood[ 2 ], 0.75 );
             glVertex3f( x + 0.0, 0.0, z + 0.5 );
             glVertex3f( x + 0.0, 0.0, z + 1.0 );
             glVertex3f( x + 0.5, 0.0, z + 1.0 );
@@ -112,10 +112,10 @@ void _FLOOR(int HALF_GRID_SIZE)
         }
     }
     glEnd();
-*/
-glLineWidth(1.5);
+
+/*glLineWidth(1.5);
 glBegin(GL_LINES);
-glColor3f(0.91f, 0.10f, 0.86f);
+glColor3f(0.13f, 0.16f, 0.15f);
 for(int i = -HALF_GRID_SIZE; i<=HALF_GRID_SIZE; i++)
 {
     glVertex3f((float)i,0,(float)-HALF_GRID_SIZE);
@@ -126,8 +126,25 @@ for(int i = -HALF_GRID_SIZE; i<=HALF_GRID_SIZE; i++)
 }
 glEnd();
 //_FLOOR(10);
+*/
 }
 
+void _PLATFORM()
+{
+    glColor3f(0.2, 0.5, 0.5);
+   // glutSolidCube(2);
+    glBegin(GL_QUADS);
+    glVertex3f(0.0, 0.0, 0.0);
+    glVertex3f(2.0, 0.0, 0.0);
+    glVertex3f(2.0, 0.0, 2.0);
+    glVertex3f(0.0, 0.0, 2.0);
+
+    glVertex3f(0.0, 1.0, 0.0);
+    glVertex3f(2.0, 1.0, 0.0);
+    glVertex3f(2.0, 1.0, 2.0);
+    glVertex3f(0.0, 1.0, 2.0);
+    glEnd();
+}
 static void keyboard(unsigned char key, int x, int y)
 {
     switch (key)
@@ -150,22 +167,22 @@ static void Special_key(int key, int x, int y)
     switch(key)
     {
     case GLUT_KEY_LEFT:
-        glpRotateFrameLocalY(&frameCamera,  0.001f);
+        glpRotateFrameLocalY(&frameCamera,  0.05f);
         break;
     case GLUT_KEY_RIGHT:
-        glpRotateFrameLocalY(&frameCamera, -0.001f);
+        glpRotateFrameLocalY(&frameCamera, -0.05f);
         break;
     case GLUT_KEY_UP:
-        glpMoveFrameForward(&frameCamera,  0.001f);
+        glpMoveFrameForward(&frameCamera,  0.1f);
         break;
     case GLUT_KEY_DOWN:
-        glpMoveFrameForward(&frameCamera, -0.001f);
+        glpMoveFrameForward(&frameCamera, -0.1f);
         break;
     case GLUT_KEY_PAGE_UP:
-        glpMoveFrameUp(&frameCamera,  0.001f);
+        glpMoveFrameUp(&frameCamera,  0.1f);
         break;
     case GLUT_KEY_PAGE_DOWN:
-        glpMoveFrameUp(&frameCamera, -0.001f);
+        glpMoveFrameUp(&frameCamera, -0.1f);
         break;
     case GLUT_KEY_END:
         break;
@@ -209,31 +226,6 @@ static void resize(int width, int height)
     glLoadIdentity();
 }
 
-void Reshape(int width, int height)
-{
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-        if(projection==FRUSTUM)
-        {
-            if(scale==ASPECT_1_1)
-            {
-            if(width<height && width>0)
-            glFrustum(-zakres, zakres, -zakres*height/width, zakres*height/width, blisko, daleko);
-            else if(width>=height && height>0)
-            glFrustum(-zakres*width/height, zakres*width/height, -zakres, zakres, blisko, daleko);
-            }
-            else
-            glFrustum(-zakres, zakres, -zakres, zakres, blisko, daleko);
-        }
-
-        if(projection==PERSPECTIVE)
-        {
-            if(height > 0) aspect = width/(GLdouble)height;
-            gluPerspective(FOV, aspect, blisko, daleko);
-        }
-    display();
-}
 void _MAINMENU(int value)
 {
     switch(value)
@@ -293,6 +285,7 @@ void _PROJECTIONMENU(int value)
         Reshape( glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT) );
         break;
     }
+    glutPostRedisplay();
 }
 
 static void przywracanie()
@@ -309,29 +302,93 @@ static void idle(void)
     glutPostRedisplay();
 }
 
+void Reshape(int width, int height)
+{
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+        if(projection==ORTHO)
+        {
+            if(scale==ASPECT_1_1)
+            {
+                if(width < height && width > 0)
+                    glOrtho(-zakres, zakres, -zakres*height/width, zakres*height/width, -zakres, zakres);
+                else
+                    if(width>= height && height > 0)
+                        glOrtho(-zakres*width/height, zakres*width/height, -zakres, zakres, -zakres, zakres);
+            }
+            else glOrtho(-zakres, zakres, -zakres, zakres, -zakres, zakres);
+        }
+
+        if(projection==FRUSTUM)
+        {
+            if(scale==ASPECT_1_1)
+            {
+            if(width<height && width>0)
+            glFrustum(-zakres, zakres, -zakres*height/width, zakres*height/width, blisko, daleko);
+            else if(width>=height && height>0)
+            glFrustum(-zakres*width/height, zakres*width/height, -zakres, zakres, blisko, daleko);
+            }
+            else
+            glFrustum(-zakres, zakres, -zakres, zakres, blisko, daleko);
+        }
+
+        if(projection==PERSPECTIVE)
+        {
+            if(height > 0) aspect = width/(GLdouble)height;
+            gluPerspective(FOV, aspect, blisko, daleko);
+        }
+
+    display();
+}
+
 static void display(void)
 {
-    const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
-    const double a = t*90.0;
+    glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     glpApplyCameraTransform(&frameCamera);
     glShadeModel(GL_SMOOTH);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(1, 1, 1, 0.75);
-    glPushMatrix();
-    glTranslated(0, -2, 0);
-    _FLOOR(1000);
-    glPopMatrix();
-//    glFlush();
+        glPushMatrix();
+            glTranslated(0, -2, 0);
+            _FLOOR();
+        glPopMatrix();
+        glPushMatrix();
+            glTranslated(0, -0.99, -10);
+            _PLATFORM();
+        glPopMatrix();
+
+    glFlush();
     glutSwapBuffers();
+}
+
+//void TimerFunction(int value)
+//{
+//    glutPostRedisplay();
+//    glutTimerFunc(3, TimerFunction, 1);
+//}
+
+void _SETTINGS()
+{
+    glShadeModel(GL_SMOOTH);
+    glFrontFace(GL_CCW);
+    glpInitFrame(&frameCamera);
+    glEnable(GL_DEPTH_TEST);
+
+ //   glpMoveFrameForward(&frameCamera, -10.0f);
+ //   glpMoveFrameUp(&frameCamera, 10.0f);
 }
 
 int main(int argc, char *argv[])
 {
+    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
     glutInit(&argc, argv);
     glutInitWindowSize(1024,768);
     glutInitWindowPosition(10,10);
-    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
     glutCreateWindow("GKiW Projekt Zaliczeniowy");
     glpInitFrame(&frameCamera);
     glutDisplayFunc(display);
@@ -343,6 +400,9 @@ int main(int argc, char *argv[])
     glutMotionFunc(MouseMotion);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+    _SETTINGS();
+
+   // glutTimerFunc(3, TimerFunction, 1); ///////////////////
     glutIdleFunc(idle);
         int oswietlenie_wlacznik = glutCreateMenu(_LIGHTINGMENU);
         #ifdef WIN32
@@ -356,9 +416,11 @@ int main(int argc, char *argv[])
         #ifdef WIN32
             glutAddMenuEntry("PROJECTION: PERSPECTIVE", PERSPECTIVE);
             glutAddMenuEntry("PROJECTION: FRUSTUM", FRUSTUM);
+            glutAddMenuEntry("PROJECTION: ORTHO", ORTHO);
         #else
             glutAddMenuEntry("PROJECTION: PERSPECTIVE", PERSPECTIVE);
             glutAddMenuEntry("PROJECTION: FRUSTUM", FRUSTUM);
+            glutAddMenuEntry("PROJECTION: ORTHO", ORTHO);
         #endif // WIN32
         glutCreateMenu(_MAINMENU); // int mainMenu
         #ifdef WIN32
