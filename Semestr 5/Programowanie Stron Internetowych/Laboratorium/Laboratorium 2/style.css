@@ -1,0 +1,91 @@
+
+
+
+body {
+	background-image: url("logo.png");
+	background-repeat: no-repeat;
+	background-position: right;
+	height: 150px;
+	background-color: silver;
+	
+}
+
+h1 {
+	font-family: verdana;
+	font-size: 24px;
+}
+
+
+div#div1 {
+	background-color: gold;
+}
+
+div#div2 {
+	border: dashed;
+	border-color: blue;
+	border-width: 2px;
+	
+/*	border: dashed blue 2px; - Zadziala tez tak */ 
+}
+
+div#div3 {
+	background-color: gold;
+	
+	border-width: 5px;
+	border-style: solid;
+	border-radius: 20px;
+	
+	
+	border-top-color: black;
+	border-bottom-color: black;
+	
+	
+	border-left-color: red;
+	border-right-color: red;
+	
+}
+
+p {
+	font-family: verdana;
+	font-size: 18px;	
+}
+
+p#p2 {
+	text-align: right;
+}
+
+span {
+	font-weight: bold;
+}
+
+span#span1 {
+	color: green;
+}
+
+span#span3 {
+	color: red;
+}
+
+a {
+	color: black;
+	text-decoration: none;	
+}
+
+a:hover {
+	color: grey;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
