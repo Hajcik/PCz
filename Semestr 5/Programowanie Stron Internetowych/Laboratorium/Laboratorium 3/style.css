@@ -1,0 +1,41 @@
+
+body {
+background-color: DeepSkyBlue;
+}
+
+div#Naglowek_strony {
+background-color: blue;
+width: auto;
+height: 70px;
+padding: 10px;
+margin: 0;
+}
+
+h1#sisk {
+
+text-align: center;
+font-family: verdana;
+font-size: 24px;
+color: White;
+}
+
+div#Menu {
+width: 150px;
+height: 500px;
+padding: 10px;
+border: 2px solid black;
+margin: 0;
+}
+
+h3#menu {
+font-family: arial;
+font-weight: bold;
+color: Black;
+}
+
+p#menu {
+font-family: arial;
+line-height: 1.5;
+}
+
+
