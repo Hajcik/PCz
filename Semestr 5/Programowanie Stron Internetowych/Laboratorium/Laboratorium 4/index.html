@@ -11,15 +11,44 @@
     </head>
 	<body>
 
-        <div class="form">
-            <label for="guessField">Zgaduj:</label>
+        <div id="zad1" class="form">
+            <p id="p1">Zadanie 1:</p>
+            <label for="guessField">Zgadnij liczbę z przedziału 1-10:</label>
             <input type="text" id="guessField" class="guessField">
             <input type="submit" value = "Sprawdźmy!" 
             class = "guessSubmit" id = "submitguess">
         </div>
         
+        <div id="zad2" class="form">
+            <br>
+            <p id="p2">Zadanie 2:</p>
+            Operacja mnożenia i dzielenia:<br>
+            <p id="pli">Liczba 1: <input type="text" id="1_liczba"><br>
+                        Liczba 2: <input type="text" id="2_liczba"></p>
+            
+            <p id="przyciski_zad2">
+                <input type="button" onClick="mnoz()" Value="Mnożenie">
+                <input type="button" onClick="dziel()" Value="Dzielenie">
+            </p>
+
+            
+            Wynikiem operacji jest:
+            <span id="wynik"></span>
+        </div>
+
+        <div id="zad3" class="form">
+            <p id="p3">Zadanie 3:</p>
+            Zamień podaną temperaturę w skali Celsjusza na skalę Fahrenheit'a:<br>
+            <p id="cel">Stopnie w skali Celsjusza: <input type="text" id="celsjusz"></p>
+            <p id="przyciski_zad3"><input type="button" onClick="konwersjaCnaF" Value="Wynik konwersji:"></p>
+            <span id="wynik_konwersji"></span>
+        </div>
+
+        <div id="zad4" class="form">
+
+        </div>
+
         <script src="script.js"></script>
         
 	</body>
 </html>
-
