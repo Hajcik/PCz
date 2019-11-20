@@ -1,0 +1,65 @@
+body {
+    background-color: lightblue;
+}
+
+
+
+
+
+#zad1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin: auto;
+    font-family: verdana;
+}
+
+#p1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+}
+
+#zad2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    font-family: verdana;
+}
+
+#p2 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+}
+
+#pli {
+    flex-direction: row;
+
+}
+
+#przyciski_zad2 {
+    flex-direction: row;
+}
+
+
+#zad3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    font-family: verdana;
+
+}
+
+#cel {
+    flex-direction: row;
+}
+
+#przyciski_zad3
+{
+    flex-direction: row;
+}
