@@ -2,10 +2,6 @@ body {
     background-color: lightblue;
 }
 
-
-
-
-
 #zad1 {
     display: flex;
     flex-direction: column;
@@ -62,4 +58,18 @@ body {
 #przyciski_zad3
 {
     flex-direction: row;
+}
+
+#zad4 {
+    display: flex;
+    
+    justify-content: center;
+    
+    margin: auto;
+    font-family: verdana;
+
+}
+
+#an {
+    flex-direction: row;  
 }
