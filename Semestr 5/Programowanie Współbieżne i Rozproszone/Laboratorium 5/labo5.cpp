@@ -1,4 +1,15 @@
- #include<iostream>
+/*
+Napisać program z wykorzystaniem biblioteki MPI, którego zadaniem jest podzielenie size
+procesów na dwie grupy. Pierwsza grupa powinna się składać z procesów parzystych a druga z
+nieparzystych. Przy pomocy funkcji MPI_Reduce zsumować numery globalnych procesów w
+obrębie każdej grupy. Ostatni proces z każdej nowej grupy powinien wyświetlić wynik obliczeń.
+MPI_Reduce (*sendbuf,*recvbuf,count,datatype,op,root,comm)
+MPI_Group_incl (group,n,*ranks,*newgroup)
+MPI_Group_difference (group1,group2,*newgroup
+MPI_Comm_create (comm,group,*newcomm)
+*/
+
+#include<iostream>
  #include<cstdlib>
  #include "mpi.h"
 
