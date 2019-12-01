@@ -1,22 +1,10 @@
 /*
 Kompilacja: mpic++ -o lab1 lab1.cpp
 Uruchomienie: mpirun -np 4 ./lab1
-Napisać program z wykorzystaniem biblioteki MPI, który będzie realizował komunikację między
-4 procesami z wykorzystaniem funkcji MPI_Send i funkcji MPI_Recv.
-Procesy, w kolejności od procesu 0 do procesu 3, mają przekazywać wiadomość msg zwiększając
-jej wartość o swój rank:
-proces 0: wysyła msg=0 do procesu 1;
-proces 1: odbiera msg;
- zwiększa wartość: msg = msg + rank;
- wysyła msg do procesu 2;
-proces 2: odbiera msg;
- zwiększa wartość msg = msg + rank;
- wysyła msg do procesu 3;
-proces 3: odbiera msg;
- zwiększa wartość msg = msg + rank;
- wyświetla rank i wartość msg;
-Po uruchomieniu (mpirun -np 4 ./lab1) , program powinien wypisać na ekranie:
-rank:3 msg:6
+
+Napisać program z wykorzystaniem biblioteki MPI, który pozwoli na uruchomienie równolegle np
+procesów. Każdy proces powinien wyświetli bieżący numer procesu, liczbę wszystkich procesów
+oraz podstawowe informacje o komputerze.
 
 */
 
