@@ -1,3 +1,54 @@
+/*
+Wykorzystując bibliotekę MPI napisać równoległą wersję poniższego kodu:
+
+#include <iostream>
+#include <stdlib.h>
+int max(const int& a, const int& b) {
+return (a>b)?a:b;
+}
+int main(int argv, char**argc) {
+int n;
+std::cout<<"podaj wartosc n: "<<std::endl;
+std::cin>>n;
+int * tab = new int[n];
+srand (time(NULL));
+for(int i = 0; i<n; ++i) {
+//tab[i]=i;
+tab[i]=rand() % 100;
+}
+int mx = tab[0];
+for(int i = 1; i<n; ++i) {
+mx = max(mx, tab[i]);
+}
+std::cout<<mx<<std::endl;
+delete [] tab;
+}
+
+Założenia:
+– dowolny rozmiar tablicy n;
+– dowolna liczba procesów ( n>>size );
+– podstawowe zadania dla procesu 0:
+– dynamicznie przydzielić pamięć dla głównej tablicy tab o rozmiarze n,
+– zapewnić równomierny podział obliczeń pomiędzy dostępne procesy (rys.): wyznaczyć rozmiar
+zadania nRank dla każdego procesu,
+– do każdego procesu wysłać rozmiar poszczególnych fragmentów głównej tablicy (nRank),
+– przesłać odpowiednie fragmenty głównej tablicy do każdego procesu,
+– podstawowe zadania dla pozostałych procesów:
+– odebrać rozmiar nRank poszczególnych części tablicy,
+– dynamicznie przydzielić pamięć dla tablicy o rozmiarze nRank,
+– odebrać odpowiedni fragment tablicy,
+– podstawowe zadania dla wszystkich procesów:
+– znaleźć maksymalny element maxRank w obrębie każdego procesu,
+– wykorzystać funkcję MPI_Reduce do znalezienia maksymalnego elementu maxAll spośród
+znalezionych elementów w poszczególnych procesach
+MPI_Reduce (*sendbuf, *recvbuf, count, datatype, op, root, comm)
+MPI_Reduce(&maxRank, &maxAll, 1, MPI_INT, MPI_MAX, 0, MPI_COMM_WORLD )
+– zwolnić obszar pamięci dynamicznej;
+Uwaga!
+W celu uproszczenia można przyjąć: n=100 oraz -np 4
+
+*/
+
 #include <iostream>
 #include <mpi.h>
 #include <ctime>
