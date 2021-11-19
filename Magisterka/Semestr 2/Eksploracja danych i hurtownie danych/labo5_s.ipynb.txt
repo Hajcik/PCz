@@ -1,0 +1,100 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+from matplotlib.figure import Figure
+
+beton = pd.read_excel('beton_dane.xls')
+
+beton.to_html('beton.html')
+
+# Zadanie 1
+# 1. W danym zakresie nie istniej¹ ¿adne puste (NaN) wartoœci
+beton.isnull().sum()
+
+# 2. Wartoœci zerowe zawieraj¹ siê w trzech kolumnach, zuzel wielkopiecowy,
+# popió³ lotny oraz up³ynniacz.
+beton.eq(0).sum()
+
+# 3. Wszystkie kolumny oprócz wieku s¹ typu zmiennoprzecinkowego, float.
+# Wiek betonu jest typu integer.
+beton.info()
+
+# 4. Najciê¿szy beton: 2551.0 kg / Najl¿ejszy beton: 2194.6 kg
+minimum = beton['suma_waga'].min()
+maximum = beton['suma_waga'].max()
+print(str(minimum) + ' : ' + str(maximum))
+
+# 5. Funkcja nunique() zwróci informacjê o unikalnych wartoœciach dla ka¿dej kolumny
+# Najwiêcej unikalnych posiada kolumna 'wytrzymalosc' = 845, najmniej 'wiek_dni' = 14.
+beton.nunique()
+
+# 6. Dzien w ktorym najczesciej byly robione badania dla betonu,
+# to 28 dzien od jego powstania.
+beton['wiek_dni'].mode()
+
+# Zadanie 2
+# Wykres rozrzutu zawartoœci cementu do wytrzyma³oœci z podzia³em na dni dokonania pomiaru
+
+plt.figure(figsize=(10,10))
+ax = sns.scatterplot(data = beton, x = beton['cement'], y = beton['wytrzymalosc'], hue = beton['wiek_dni'], legend='full', palette='deep')
+ax.set(xlabel='Cement [kg/m^3]', ylabel='Wytrzyma³oœæ [MPa]')
+
+plt.show()
+
+# Histogram liczby próbek w kolejnych zakresach wytrzyma³oœci betonu
+his = sns.histplot(data='beton', x=beton['wytrzymalosc'])
+his.set(xlabel='Wytrzyma³oœæ [MPa]', ylabel = 'Liczba próbek [n]')
+plt.show()
+
+# Zadanie 3
+def linreg(x, y, clr1, xlabel, ylabel):
+    slope, intercept, r, p, std_err = stats.linregress(x, y)
+    
+    def func(x):
+        return slope * x + intercept
+    
+    model = list(map(func, x))
+    
+    plt.scatter(x, y, color=clr1)
+    plt.plot(x, model, color='black')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.grid()
+    plt.show()
+    
+    print("LINEAR REGRESSION")
+    print("------------------")
+    print("Slope: " + str(slope))
+    print("Intercept: " + str(intercept))
+    print("RValue: " + str(r) +"\n")
+
+linreg(beton['wytrzymalosc'], beton['cement'], 'pink', 'Wytrzyma³oœæ [MPa]', 'Cement [kg/m^3]')
+linreg(beton['kruszywo_grube'], beton['kruszywo_drobne'], 'green', 'Kruszywo grube [kg/m^3]', 'Kruszywo drobne [kg/m^3]')
+
+# Omówienie danych
+# Zadanie 4 : Macierz korelacji
+plt.figure(figsize=(8,6))
+sns.heatmap(beton.corr().abs(), annot=True, vmin=0, vmax=1)
+plt.show()
+
+# Wykres rozrzutu dla najbardziej skorelowanych: [ zawarte s¹ wartoœci zerowe ]
+sns.scatterplot(data = beton, x=beton['uplynniacz'], y=beton['woda'])
+plt.show()
+
+# Wykres rozrzutu dla najbardziej skorelowanych: [ bez wartoœci zerowych ]
+sns.scatterplot(data = beton, x=beton['uplynniacz'], y=beton['woda'])
+plt.xlim(1, 35)
+plt.show()
+
+# Wykres rozrzutu dla najmniej skorelowanych:
+sns.scatterplot(data = beton, x=beton['kruszywo_grube'], y = beton['wiek_dni'])
+plt.show()
+
+# Zadanie 5
+m_bet = np.array([2190, 2234, 2290, 2333, 2362, 2412, 2499, 2550])
+
+def my_regression():
+    
+linreg(beton['suma_waga'], beton['woda'], 'orange', 'suma waga', 'woda')
